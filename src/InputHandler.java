@@ -3,11 +3,12 @@ import java.util.Scanner;
 public class InputHandler {
 
     public static String createName() {
-        //name must have min 3 character
-        // name must have max 3 characters
-        // just english alphabet
         Scanner name = new Scanner(System.in);
-        return name.next();
+        String answer = name.nextLine();
+        if (answer.length() < 3 || answer.length() > 15) {
+            return null;
+        }
+        return answer;
     }
 
     public static Integer createIndex() {

@@ -10,7 +10,7 @@ public class Game {
         signs = new char[]{'X', 'O'};
         current = 0;
         welcome();
-        playerNames();
+        constructPlayerNames();
         run();
     }
 
@@ -61,11 +61,21 @@ public class Game {
         return answer - 1;
     }
 
-    private void playerNames() {
+    private void constructPlayerNames() {
         System.out.println("Enter name for first player [X]: ");
-        String player1 = InputHandler.createName();
+        String player1 = buildName();
+
         System.out.println("Enter name for second player [O]: ");
-        String player2 = InputHandler.createName();
+        String player2 = buildName();
         players = new String[]{player1, player2};
+    }
+
+    private String buildName() {
+        String player = InputHandler.createName();
+        while (player == null) {
+            System.out.println("Error! Keep name between 3-15 characters long!");
+            player = InputHandler.createName();
+        }
+        return player;
     }
 }
