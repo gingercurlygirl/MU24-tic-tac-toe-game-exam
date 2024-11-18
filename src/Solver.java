@@ -6,17 +6,16 @@ public class Solver {
         board[index] = sign;
 
 
-        if (draw(board)) {
-            return 3;
-        }
-
-
         boolean winInAnyRow = checkRow(0, board) || checkRow(1, board) || checkRow(2, board);
         boolean winInAnyCol = checkColumn(0, board) || checkColumn(1, board) || checkColumn(2, board);
         boolean winInAnyDia = checkDiagonals(board);
 
         if (winInAnyRow || winInAnyCol || winInAnyDia) {
             return 1;
+        }
+
+        if (draw(board)) {
+            return 3;
         }
 
         return 0;
