@@ -1,17 +1,24 @@
+import java.util.Scanner;
+
 public class Game {
     String[] players;
-    char[] board;
-    char[] signs;
-    int current;
+    char[] board = new char[]{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
+    char[] signs = new char[]{'X', 'O'};
+    int current = 0;
+    int[] playerScore = new int[]{0, 0};
+    boolean running = true;
 
 
     public Game() {
+        welcome();
+        players = constructPlayerNames();
+        run();
+    }
+
+    private void reset() {
         board = new char[]{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
         signs = new char[]{'X', 'O'};
         current = 0;
-        welcome();
-        constructPlayerNames();
-        run();
     }
 
     public void welcome() {
@@ -19,36 +26,40 @@ public class Game {
     }
 
     public void run() {
-        boolean try_again = false;
         System.out.println("game begins!\n");
-        while (true) {
+        while (running) {
             System.out.println(Board.buildBoard(board) + "\n");
 
             int index = askForIndex();
             int status = Solver.solve(index, signs[current], board);
 
-            if (status == 0) {
-                try_again = false;
-            } else if (status == 1) {
-                win();
-                break;
-            } else if (status == 2) {
-                System.out.println("Error: this slot is taken, choose another!\n");
-                try_again = true;
-            } else if (status == 3) {
-                draw();
-                break;
-            }
+            handleStatus(status);
+        }
 
+    }
 
-            if (!try_again) {
-                if (current == 0) current = 1;
-                else current = 0;
-            }
+    private void handleStatus(int status) {
+        if (status == 0) {
+            changePlayer();
+        } else if (status == 1) {
+            win();
+            restart();
+            changePlayer();
+        } else if (status == 2) {
+            System.out.println("Error: this slot is taken, choose another!\n");
+        } else if (status == 3) {
+            draw();
+            restart();
+            changePlayer();
         }
     }
 
-    private void draw(){
+    private void changePlayer() {
+        if (current == 0) current = 1;
+        else current = 0;
+    }
+
+    private void draw() {
         System.out.println(Board.buildBoard(board) + "\n");
         System.out.println("Game ended in draw!");
     }
@@ -56,6 +67,27 @@ public class Game {
     private void win() {
         System.out.println(Board.buildBoard(board) + "\n");
         System.out.println("Winner is " + players[current] + " using " + signs[current] + " as sign!");
+        playerScore[current]++;
+    }
+
+    private void scoreBoard() {
+        System.out.println("Scoreboard:\n " + players[0] + " : " + playerScore[0] + "\n " + players[1] + " : " + playerScore[1]);
+
+    }
+
+    private void restart() {
+        scoreBoard();
+        if (quit()) {
+            running = false;
+        } else {
+            reset();
+        }
+    }
+
+    private boolean quit() {
+        System.out.println("Do you want to play again? [y/n]:");
+        Scanner answer_quit = new Scanner(System.in);
+        return answer_quit.nextLine().equals("n");
     }
 
     private int askForIndex() {
@@ -69,13 +101,13 @@ public class Game {
         return answer - 1;
     }
 
-    private void constructPlayerNames() {
+    private String[] constructPlayerNames() {
         System.out.println("Enter name for first player [X]: ");
         String player1 = buildName();
 
         System.out.println("Enter name for second player [O]: ");
         String player2 = buildName();
-        players = new String[]{player1, player2};
+        return new String[]{player1, player2};
     }
 
     private String buildName() {
