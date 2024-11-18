@@ -12,7 +12,6 @@ public class Game {
         welcome();
         playerNames();
         run();
-
     }
 
     public void welcome() {
@@ -53,7 +52,13 @@ public class Game {
 
     private int askForIndex() {
         System.out.println(players[current] + " enter a slot number to place " + signs[current] + " in [1-9]:");
-        return InputHandler.createIndex() - 1;
+        Integer answer = InputHandler.createIndex();
+        while (answer == null) {
+            System.out.println("Error! Try again [1-9]:");
+            answer = InputHandler.createIndex();
+        }
+
+        return answer - 1;
     }
 
     private void playerNames() {
