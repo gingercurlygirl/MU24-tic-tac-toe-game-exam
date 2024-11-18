@@ -35,6 +35,9 @@ public class Game {
             } else if (status == 2) {
                 System.out.println("Error: this slot is taken, choose another!\n");
                 try_again = true;
+            } else if (status == 3) {
+                draw();
+                break;
             }
 
 
@@ -43,6 +46,11 @@ public class Game {
                 else current = 0;
             }
         }
+    }
+
+    private void draw(){
+        System.out.println(Board.buildBoard(board) + "\n");
+        System.out.println("Game ended in draw!");
     }
 
     private void win() {
