@@ -9,15 +9,22 @@ public class Game {
         board = new char[]{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
         signs = new char[]{'X', 'O'};
         current = 0;
+        welcome();
         playerNames();
         run();
+
+    }
+
+    public void welcome() {
+        System.out.println("Welcome to the Tic Tac Toe game!\n");
     }
 
     public void run() {
         boolean try_again = false;
-        System.out.println("game begins!");
+        System.out.println("game begins!\n");
         while (true) {
-            Board.printBoard(board);
+            System.out.println(Board.buildBoard(board) + "\n");
+
             int index = askForIndex();
             int status = Solver.solve(index, signs[current], board);
 
@@ -27,7 +34,7 @@ public class Game {
                 win();
                 break;
             } else if (status == 2) {
-                System.out.println("problem, try again");
+                System.out.println("Error: this slot is taken, choose another!\n");
                 try_again = true;
             }
 
@@ -40,7 +47,7 @@ public class Game {
     }
 
     private void win() {
-        Board.printBoard(board);
+        System.out.println(Board.buildBoard(board) + "\n");
         System.out.println("Winner is " + players[current] + " using " + signs[current] + " as sign!");
     }
 
@@ -50,9 +57,9 @@ public class Game {
     }
 
     private void playerNames() {
-        System.out.println("Enter name for player1 [X]: ");
+        System.out.println("Enter name for first player [X]: ");
         String player1 = InputHandler.createName();
-        System.out.println("Enter name for player2 [O]: ");
+        System.out.println("Enter name for second player [O]: ");
         String player2 = InputHandler.createName();
         players = new String[]{player1, player2};
     }
