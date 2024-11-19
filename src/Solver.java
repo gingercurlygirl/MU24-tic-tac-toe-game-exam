@@ -1,10 +1,6 @@
 public class Solver {
     public static int solve(int index, char sign, char[] board) {
-        if (board[index] != ' ') return 2;
-
-
         board[index] = sign;
-
 
         boolean winInAnyRow = checkRow(0, board) || checkRow(1, board) || checkRow(2, board);
         boolean winInAnyCol = checkColumn(0, board) || checkColumn(1, board) || checkColumn(2, board);
@@ -20,6 +16,10 @@ public class Solver {
 
         return 0;
 
+    }
+
+    public static boolean isSlotOccupied(int index, char[] board) {
+        return board[index] != ' ';
     }
 
     private static boolean draw(char[] board) {

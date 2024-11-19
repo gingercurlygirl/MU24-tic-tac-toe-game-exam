@@ -2,18 +2,29 @@ import java.util.Scanner;
 
 public class InputHandler {
 
-    public static String createName() {
-        Scanner name = new Scanner(System.in);
-        String answer = name.nextLine();
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public static int readNumberOfPlayers() {
+        String answer = scanner.nextLine();
+        if (answer.equals("1")) {
+            System.out.println("Player vs Computer!\n");
+            return 1;
+        } else {
+            System.out.println("Player vs Player!\n");
+            return 2;
+        }
+    }
+
+    public static String readName() {
+        String answer = scanner.nextLine();
         if (answer.length() < 3 || answer.length() > 15) {
             return null;
         }
         return answer;
     }
 
-    public static Integer createIndex() {
-        Scanner index = new Scanner(System.in);
-        String answer = index.next();
+    public static Integer readIndex() {
+        String answer = scanner.next();
         if (answer.equals("1")) {
             return 1;
         } else if (answer.equals("2")) {
