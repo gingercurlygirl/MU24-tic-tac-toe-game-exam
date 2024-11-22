@@ -11,7 +11,6 @@ public class Game {
     public Game() {
         welcome();
         board = createBoard();
-        System.out.println(board.buildBoard() + "\n");
         players = createPlayers();
         maxIndex = board.rows * board.rows;
         run();
@@ -50,22 +49,22 @@ public class Game {
                 index = players[current].play(maxIndex);
             }
 
-            int status = solver.solve(index, players[current].getSign(), board);
+            String status = solver.solve(index, players[current].getSign(), board);
 
             handleStatus(status);
         }
     }
 
-    private void handleStatus(int status) {
-        if (status == 0) {
-            changePlayer();
-        } else if (status == 1) {
+    private void handleStatus(String status) {
+        if (status.equals("win")) {
             win();
             restart();
             changePlayer();
-        } else if (status == 3) {
+        } else if (status.equals("draw")) {
             draw();
             restart();
+            changePlayer();
+        } else {
             changePlayer();
         }
     }

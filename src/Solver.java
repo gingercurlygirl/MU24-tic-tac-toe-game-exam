@@ -1,25 +1,25 @@
 public class Solver {
     int numberOfPopulatedSlots;
 
-    public int solve(int index, char sign, Board boardd) {
-        char[] board = boardd.data;
-        int rows = boardd.rows;
+    public String solve(int index, char sign, Board board) {
+        char[] data = board.data;
+        int rows = board.rows;
 
-        board[index] = sign;
+        data[index] = sign;
 
-        boolean winInAnyRowOrColumn = checkWinInRowsAndColumns(rows, board);
-        boolean winInAnyDia = checkFirstDiagonal(rows, board) || checkSecondDiagonal(rows, board);
+        boolean winInAnyRowOrColumn = checkWinInRowsAndColumns(rows, data);
+        boolean winInAnyDia = checkFirstDiagonal(rows, data) || checkSecondDiagonal(rows, data);
 
         if (winInAnyRowOrColumn || winInAnyDia) {
-            return 1; // win
+            return "win";
         }
 
         this.numberOfPopulatedSlots++;
         if (this.numberOfPopulatedSlots == rows * rows) {
-            return 3; // draw
+            return "draw";
         }
 
-        return 0; // continue
+        return "continue";
 
     }
 
@@ -39,6 +39,7 @@ public class Solver {
 
     private static boolean checkRow(int n, int rows, char[] board) {
         for (int i = 0; i < rows - 1; i++) {
+            // character N and N+1 must be equal, and also character N must not be ' '
             boolean same = board[n * rows + i] == board[n * rows + i + 1] && board[n * rows + i] != ' ';
             if (!same) {
                 return false;
@@ -50,6 +51,7 @@ public class Solver {
 
     private static boolean checkColumn(int n, int rows, char[] board) {
         for (int i = 0; i < rows - 1; i++) {
+            // character N and N+1 must be equal, and also character N must not be ' '
             boolean same = board[i * rows + n] == board[(i + 1) * rows + n] && board[i * rows + n] != ' ';
             if (!same) {
                 return false;
@@ -61,6 +63,7 @@ public class Solver {
 
     private static boolean checkFirstDiagonal(int rows, char[] board) {
         for (int i = 0; i < rows - 1; i++) {
+            // character N and N+1 on diagonal must be equal, and also character N must not be ' '
             boolean same = board[i * (rows + 1)] == board[(i + 1) * (rows + 1)] && board[i * (rows + 1)] != ' ';
             if (!same) {
                 return false;
@@ -72,6 +75,7 @@ public class Solver {
 
     private static boolean checkSecondDiagonal(int rows, char[] board) {
         for (int i = 0; i < rows - 1; i++) {
+            // character N and N+1 on diagonal must be equal, and also character N must not be ' '
             boolean same = board[(i + 1) * (rows - 1)] == board[(i + 2) * (rows - 1)] && board[(i + 1) * (rows - 1)] != ' ';
             if (!same) {
                 return false;
