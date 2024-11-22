@@ -1,47 +1,84 @@
 public class Solver {
-    public static int solve(int index, char sign, char[] board) {
+    int numberOfPopulatedSlots;
+
+    public int solve(int index, char sign, Board boardd) {
+        char[] board = boardd.data;
+        int rows = boardd.rows;
+
         board[index] = sign;
 
-        boolean winInAnyRow = checkRow(0, board) || checkRow(1, board) || checkRow(2, board);
-        boolean winInAnyCol = checkColumn(0, board) || checkColumn(1, board) || checkColumn(2, board);
-        boolean winInAnyDia = checkDiagonals(board);
+        boolean winInAnyRowOrColumn = checkWinInRowsAndColumns(rows, board);
+        boolean winInAnyDia = checkFirstDiagonal(rows, board) || checkSecondDiagonal(rows, board);
 
-        if (winInAnyRow || winInAnyCol || winInAnyDia) {
-            return 1;
+        if (winInAnyRowOrColumn || winInAnyDia) {
+            return 1; // win
         }
 
-        if (draw(board)) {
-            return 3;
+        this.numberOfPopulatedSlots++;
+        if (this.numberOfPopulatedSlots == rows * rows) {
+            return 3; // draw
         }
 
-        return 0;
+        return 0; // continue
 
     }
 
-    public static boolean isSlotOccupied(int index, char[] board) {
-        return board[index] != ' ';
+    public void reset() {
+        this.numberOfPopulatedSlots = 0;
     }
 
-    private static boolean draw(char[] board) {
-        return board[0] != ' ' && board[1] != ' ' && board[2] != ' ' &&
-                board[3] != ' ' && board[4] != ' ' && board[5] != ' ' &&
-                board[6] != ' ' && board[7] != ' ' && board[8] != ' ';
+    private static boolean checkWinInRowsAndColumns(int rows, char[] board) {
+        for (int i = 0; i < rows; i++) {
+            if (checkRow(i, rows, board) || checkColumn(i, rows, board)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    private static boolean checkRow(int row, char[] board) {
-        return board[row * 3] != ' ' && board[row * 3] == board[row * 3 + 1] && board[row * 3] == board[row * 3 + 2];
+    private static boolean checkRow(int n, int rows, char[] board) {
+        for (int i = 0; i < rows - 1; i++) {
+            boolean same = board[n * rows + i] == board[n * rows + i + 1] && board[n * rows + i] != ' ';
+            if (!same) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
+    private static boolean checkColumn(int n, int rows, char[] board) {
+        for (int i = 0; i < rows - 1; i++) {
+            boolean same = board[i * rows + n] == board[(i + 1) * rows + n] && board[i * rows + n] != ' ';
+            if (!same) {
+                return false;
+            }
+        }
 
-    private static boolean checkColumn(int column, char[] board) {
-        return board[column] != ' ' && board[column] == board[column + 3] && board[column] == board[column + 6];
+        return true;
     }
 
-    private static boolean checkDiagonals(char[] board) {
-        boolean firstDiagonal = board[0] != ' ' && board[0] == board[4] && board[0] == board[8];
-        boolean secondDiagonal = board[2] != ' ' && board[2] == board[4] && board[2] == board[6];
+    private static boolean checkFirstDiagonal(int rows, char[] board) {
+        for (int i = 0; i < rows - 1; i++) {
+            boolean same = board[i * (rows + 1)] == board[(i + 1) * (rows + 1)] && board[i * (rows + 1)] != ' ';
+            if (!same) {
+                return false;
+            }
+        }
 
-        return firstDiagonal || secondDiagonal;
+        return true;
+    }
+
+    private static boolean checkSecondDiagonal(int rows, char[] board) {
+        for (int i = 0; i < rows - 1; i++) {
+            boolean same = board[(i + 1) * (rows - 1)] == board[(i + 2) * (rows - 1)] && board[(i + 1) * (rows - 1)] != ' ';
+            if (!same) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }

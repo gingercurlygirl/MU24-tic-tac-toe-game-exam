@@ -27,9 +27,9 @@ abstract public class Player {
     private int score;
     private char sign;
 
-    public abstract int play();
-    public abstract boolean isSlotOccupied(int index, char[] board);
-    public abstract void writeInstruction();
+    public abstract int play(int maxIndex);
+    public abstract boolean isSlotOccupied(int index, Board board);
+    public abstract void writeInstruction(int maxIndex);
 
     public static Player[] buildPlayers(int numberOfPlayers) {
         if (numberOfPlayers == 1) {

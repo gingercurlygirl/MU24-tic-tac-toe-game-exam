@@ -1,3 +1,5 @@
+import org.w3c.dom.ls.LSOutput;
+
 import java.util.Scanner;
 
 public class InputHandler {
@@ -9,8 +11,11 @@ public class InputHandler {
         if (answer.equals("1")) {
             System.out.println("Player vs Computer!\n");
             return 1;
-        } else {
+        } else if (answer.equals("2")) {
             System.out.println("Player vs Player!\n");
+            return 2;
+        } else {
+            System.out.println("Invalid input! Playing default game Player vs Player!\n");
             return 2;
         }
     }
@@ -25,11 +30,16 @@ public class InputHandler {
 
     public static Integer readIndex() {
         String answer = scanner.next();
-        if (answer.equals("1")) {
-            return 1;
-        } else if (answer.equals("2")) {
-            return 2;
-        } else if (answer.equals("3")) {
+        try {
+            return Integer.parseInt(answer);
+        } catch (NumberFormatException _) {
+            return null;
+        }
+    }
+
+    public static int readNumberOfRows() {
+        String answer = scanner.nextLine();
+        if (answer.equals("3")) {
             return 3;
         } else if (answer.equals("4")) {
             return 4;
@@ -43,8 +53,11 @@ public class InputHandler {
             return 8;
         } else if (answer.equals("9")) {
             return 9;
+        } else if (answer.equals("10")) {
+            return 10;
         } else {
-            return null;
+            System.out.println("Invalid input! Playing default game 3x3!");
+            return 3;
         }
     }
 }

@@ -1,17 +1,26 @@
 import java.util.Scanner;
 
 public class Game {
-    char[] board = new char[]{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
+    Board board;
+    int maxIndex;
     int current = 0;
     boolean running = true;
     Player[] players;
-
+    Solver solver = new Solver();
 
     public Game() {
         welcome();
+        board = createBoard();
+        System.out.println(board.buildBoard() + "\n");
         players = createPlayers();
+        maxIndex = board.rows * board.rows;
         run();
         System.out.println("Good bye!");
+    }
+
+    private Board createBoard() {
+        System.out.println("Tic Tac Toe is a game played NxN field. Write how many rows you want(N), between (3-10), default is 3x3?");
+        return new Board(InputHandler.readNumberOfRows());
     }
 
     private Player[] createPlayers() {
@@ -20,25 +29,28 @@ public class Game {
     }
 
     private void reset() {
-        board = new char[]{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
+        board.reset();
+        solver.reset();
     }
 
     public void welcome() {
-        System.out.println("Welcome to the Tic Tac Toe game!\n");
+        System.out.println("--------------------------------");
+        System.out.println("Welcome to the Tic Tac Toe game!");
+        System.out.println("--------------------------------\n");
     }
 
     public void run() {
         System.out.println("Game begins!\n");
         while (running) {
-            System.out.println(Board.buildBoard(board) + "\n");
+            System.out.println(board.buildBoard() + "\n");
 
-            players[current].writeInstruction();
-            int index = players[current].play();
+            players[current].writeInstruction(maxIndex);
+            int index = players[current].play(maxIndex);
             while (players[current].isSlotOccupied(index, board)) {
-                index = players[current].play();
+                index = players[current].play(maxIndex);
             }
 
-            int status = Solver.solve(index, players[current].getSign(), board);
+            int status = solver.solve(index, players[current].getSign(), board);
 
             handleStatus(status);
         }
@@ -64,12 +76,12 @@ public class Game {
     }
 
     private void draw() {
-        System.out.println(Board.buildBoard(board) + "\n");
+        System.out.println(board.buildBoard() + "\n");
         System.out.println("Game ended in draw!");
     }
 
     private void win() {
-        System.out.println(Board.buildBoard(board) + "\n");
+        System.out.println(board.buildBoard() + "\n");
         System.out.println("Winner is " + players[current].getName() + " using " + players[current].getSign() + " as sign!");
         players[current].setScore(players[current].getScore() + 1);
     }

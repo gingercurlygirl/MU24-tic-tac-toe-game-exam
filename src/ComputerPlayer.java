@@ -7,16 +7,16 @@ public class ComputerPlayer extends Player {
         setName("Computer");
     }
 
-    public int play() {
+    public int play(int maxIndex) {
         Random rng = new Random();
-        return rng.nextInt(0, 9);
+        return rng.nextInt(0, maxIndex);
     }
 
-    public boolean isSlotOccupied(int index, char[] board) {
-        return Solver.isSlotOccupied(index, board);
+    public boolean isSlotOccupied(int index, Board board) {
+        return board.isSlotOccupied(index);
     }
 
-    public void writeInstruction(){
+    public void writeInstruction(int maxIndex){
         System.out.println("Computer's turn to place " + getSign() + ":");
     }
 }
